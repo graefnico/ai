@@ -1,3 +1,8 @@
+"""
+Copyright (c) 2017 Nico Gräf (nicograef.de, github.com/graefnico)
+Simple test for the genetic algorithm implementation on github.com/graefnico/ai
+"""
+
 from GeneticAlgorithm import GeneticAlgorithm
 
 target = [
