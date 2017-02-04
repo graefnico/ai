@@ -63,7 +63,7 @@ class GeneticAlgorithm:
         # often used, so it's better to compute and store
         self.individual_indices = list(range(self.individual_size))
 
-        # seed random for comparison
+        # seed random numbers to make calculation deterministic
         random.seed(1)
 
         # variable to store current generation count
@@ -109,7 +109,7 @@ class GeneticAlgorithm:
         """
         Mutates every gene in the given individual with a probability of [self.mutation_probability]
         Mutation means replacing the current value with a random value from the solution space [self.solution_space].
-        """"
+        """
         for i in self.individual_indices:
             if random.random() <= self.mutation_probability:
                 individual[i] = random.choice(self.solution_space)
@@ -123,7 +123,7 @@ class GeneticAlgorithm:
         """
         self.selection()
         for i in self.crossover_indices:
-            self.population.append(self.crossover(i, random.choice(self.crossover_indices))
+            self.population.append(self.crossover(i, random.choice(self.crossover_indices)))
         self.generation += 1
 
     def getBestIndividual(self):
