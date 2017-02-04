@@ -26,22 +26,18 @@ class NeuralNetwork:
         self.learningRate = learningRate
         self.weights = []
 
-    def train(self, input, output, t=10000):
-        #one_percent = int(t / 100)
-        self.weights = self.init_weights(input, output)
+    def train(self, input, output, t=10000, printError=False):
+        if len(self.weights) == 0:
+            self.weights = self.init_weights(input, output)
+            
         for i in range(t):
+            
             layers, layers_with_bias = self.forward_propagation(input) # forward propagation
             deltas = self.backward_propagation(output, layers) # backward propagation
             self.updateWeights(deltas, layers_with_bias) # updating the weights
-            #if (i % (one_percent * 5) == 0):
-                #percent = int(i / one_percent)
-                #print(str(percent) + "% Error:", mean(abs(output - layers[2])).round(5))
-
-    def trainOnline(self, input, output, t=100):
-        for i in range(t):
-            layers, layers_with_bias = self.forward_propagation(input) # forward propagation
-            deltas = self.backward_propagation(output, layers) # backward propagation
-            self.updateWeights(deltas, layers_with_bias) # updating the weights
+            
+            if printError and (i % int(t / 20) == 0): # print every 5%
+                print("Error:", mean(abs(output - layers[2])).round(3))
 
     def forward_propagation(self, input):
 
@@ -96,11 +92,6 @@ class NeuralNetwork:
             return x * (1 - x)
         return 1 / (1 + exp(-x))
 
-    def tanh(self, x, deriv=False):
-        if deriv == True:
-            return x * (1 - x)
-        return tanh(x)
-
     def score(self, input, output):
         predicted_output = self.predict(input).round()
         score = 0
@@ -108,19 +99,3 @@ class NeuralNetwork:
             if array_equal(prediction, output[i]):
                 score += 1
         return score / len(input)
-
-
-    def printWeights(self):
-        for i, array in enumerate(self.weights):
-            print("")
-            if i == 0 and i == self.hidden_layers:
-                print("Weights from INPUT to OUTPUT:")
-            elif i == 0:
-                print("Weights from INPUT to Layer", i + 1, ":")
-            elif i == self.hidden_layers:
-                print("Weights from Layer", i, " to OUTPUT:")
-            else:
-                print("Weights from Layer", i, "to Layer", i + 1, ":")
-
-            print(array)
-        print("")
