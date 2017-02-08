@@ -24,29 +24,29 @@ X = X / 16
 Y = []
 for t in digits.target:
     if t == 0:
-        Y.append([0,0,0,0])
+        Y.append([1,0,0,0,0,0,0,0,0,0])
     if t == 1:
-        Y.append([0,0,0,1])
+        Y.append([0,1,0,0,0,0,0,0,0,0])
     if t == 2:
-        Y.append([0,0,1,0])
+        Y.append([0,0,1,0,0,0,0,0,0,0])
     if t == 3:
-        Y.append([0,0,1,1])
+        Y.append([0,0,0,1,0,0,0,0,0,0])
     if t == 4:
-        Y.append([0,1,0,0])
+        Y.append([0,0,0,0,1,0,0,0,0,0])
     if t == 5:
-        Y.append([0,1,0,1])
+        Y.append([0,0,0,0,0,1,0,0,0,0])
     if t == 6:
-        Y.append([0,1,1,0])
+        Y.append([0,0,0,0,0,0,1,0,0,0])
     if t == 7:
-        Y.append([0,1,1,1])
+        Y.append([0,0,0,0,0,0,0,1,0,0])
     if t == 8:
-        Y.append([1,0,0,0])
+        Y.append([0,0,0,0,0,0,0,0,1,0])
     if t == 9:
-        Y.append([1,0,0,1])
+        Y.append([0,0,0,0,0,0,0,0,0,1])
         
 # splitting the data into training and testing data.
 # (80% for training, 20% for testing)
-split_factor = 0.2
+split_factor = 0.02
 testSize = int(len(X) * split_factor)
 X_train = X[:-testSize]
 X_test = X[-testSize:]
@@ -55,11 +55,11 @@ Y_test = Y[-testSize:]
         
 # create the neural network with 15 units in the hidden layer
 # and a learning rate of 0.015 (approx. 1/64 = 1/num_features)
-nn = NeuralNetwork(20, 0.01)
+nn = NeuralNetwork(15, 0.003)
 
 # train the neural network with the test data and 750 iterations
-nn.train(X_train, Y_train, t=5000, printError=True)
-
+nn.train(X_train, Y_train, t=1000000, printError=True)
+"""
 # compute and print score for test data
 score = nn.score(X_test, Y_test)
 print("Score: ", score)
@@ -71,16 +71,29 @@ predicted_binary = nn.predict(X_test).round()
 # so we have to decode it into the original values
 predicted = []
 for pred in predicted_binary:
-    out = 0
-    for bit in pred:
-        out = (out << 1) | int(bit)
-    predicted.append(out)
+    for i,bit in enumerate(pred):
+        if bit == 1:
+            predicted.append(i)
+            break
     
 # show the first 24 test images and the prediction of the neural network
 images_and_predictions = list(zip(digits.images[-testSize:], predicted))
-for index, (image, prediction) in enumerate(images_and_predictions[:24]):
-    plt.subplot(4, 6, index + 1)
+for index, (image, prediction) in enumerate(images_and_predictions[:6]):
+    plt.subplot(2, 3, index + 1)
     plt.axis('off')
     plt.imshow(image, cmap=plt.cm.gray_r, interpolation='nearest')
     plt.title('Prediction: %i' % prediction)
+plt.show()
+"""
+
+dream_template = np.ones((1,64)) / 2
+dream = nn.dream(dream_template, np.array([[1,0,0,0,0,0,0,0,0,0]]), t=100000000)
+dream = (dream[0] * 16).round()
+print(dream)
+
+plt.subplot(1, 1, 1)
+plt.axis('off')
+plt.imshow(dream.reshape(8,8) * 16, cmap=plt.cm.gray_r, interpolation='nearest')
+plt.title('Dream of a zero')
+plt.savefig('dream1.png')
 plt.show()
