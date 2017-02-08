@@ -23,15 +23,15 @@ X = np.concatenate((X1_blue.T, X1_red.T))
 Y = np.concatenate((Y1_blue, Y1_red))
 
 # create fine grid to visualize the classification bounds
-x = np.arange(0, 1, .01)
-y = np.arange(0, 1, .01)
+x = np.arange(0, 1, .015)
+y = np.arange(0, 1, .015)
 xx, yy = np.meshgrid(x,y)
 
 grid = []
 for i in xx[0]:
     for j in yy:
         grid.append([i,j[0]])
-        
+
 # configure plot and show only datapoints for 3 seconds
 plt.rcParams["figure.figsize"] = [10,8]
 plt.scatter(X1_blue[0], X1_blue[1], c="blue", s=75)
@@ -40,7 +40,7 @@ plt.pause(3)
 
 # create the neural network with 6 units in the hidden layer
 # and the default learning rate of 0.1
-nn = NeuralNetwork(6)
+nn = NeuralNetwork([6,2])
 
 # start the training process and
 # show current classification boundaries every 100 steps
@@ -55,8 +55,8 @@ while(True):
             color.append("blue")
 
     plt.clf()
-    plt.scatter([grid[i][0] for i in range(len(grid)) if color[i]=="red"], [grid[i][1] for i in range(len(grid)) if color[i]=="red"], c="red", alpha=.1)
-    plt.scatter([grid[i][0] for i in range(len(grid)) if color[i]=="blue"], [grid[i][1] for i in range(len(grid)) if color[i]=="blue"], c="blue", alpha=.1)
+    plt.scatter([grid[i][0] for i in range(len(grid)) if color[i]=="red"], [grid[i][1] for i in range(len(grid)) if color[i]=="red"], c="red", alpha=.2)
+    plt.scatter([grid[i][0] for i in range(len(grid)) if color[i]=="blue"], [grid[i][1] for i in range(len(grid)) if color[i]=="blue"], c="blue", alpha=.2)
     plt.scatter(X1_blue[0], X1_blue[1], c="blue", s=75)
     plt.scatter(X1_red[0], X1_red[1], c="red", s=75)
     plt.pause(0.05)
