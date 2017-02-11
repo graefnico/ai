@@ -26,7 +26,7 @@ class NeuralNetwork:
         self.learningRate = learningRate
         self.weights = []
 
-    def train(self, input, output, t=10000, printError=False):
+    def train(self, input, output, t=1000, printError=False):
         if len(self.weights) == 0:
             self.init_weights(input, output)
 
@@ -48,6 +48,8 @@ class NeuralNetwork:
                 print(str(int(i / (t / 100))) + "%")
         return input
 
+    def setLearningRate(self, newLearningRate):
+        self.learningRate = newLearningRate;
 
     def forward_propagation(self, input):
         layers = [input]
