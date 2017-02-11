@@ -40,7 +40,7 @@ plt.pause(3)
 
 # create the neural network with 6 units in the hidden layer
 # and the default learning rate of 0.1
-nn = NeuralNetwork([6,2])
+nn = NeuralNetwork([6])
 
 # start the training process and
 # show current classification boundaries every 100 steps
