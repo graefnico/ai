@@ -36,14 +36,17 @@ class NeuralNetwork:
             self.updateWeights(deltas, layers_with_bias) # updating the weights
 
             if printError and (i % int(t / 20) == 0): # print every 5%
-                print("Error:", mean(abs(output - layers[2])).round(3))
+                print(str(int(i / (t / 100))) + "%", end=" ")
+                print("Error:", mean(abs(output - layers[-1])).round(4))
 
-    def dream(self, input, output, t=10):
+    def dream(self, input, output, t=10, printPercentage=False):
         for i in range(t):
             layers, layers_with_bias = self.forward_propagation(input) # forward propagation
             deltas = self.backward_propagation(output, layers) # backward propagation
-            input += self.updateinput(deltas, layers_with_bias, input)
-        return dream
+            input += self.updateInput(deltas, layers_with_bias, input)
+            if printPercentage and (i % int(t / 20) == 0): # print every 5%
+                print(str(int(i / (t / 100))) + "%")
+        return input
 
 
     def forward_propagation(self, input):
@@ -72,8 +75,8 @@ class NeuralNetwork:
         for i, delta in enumerate(reversed(deltas)):
             self.weights[i] += dot(layers[i].T, delta) * self.learningRate
 
-    def updateinput(self, deltas, layers, input):
-        input_error = dot(deltas[0], self.weights[0][:-1].T)
+    def updateInput(self, deltas, layers, input):
+        input_error = dot(deltas[-1], self.weights[0][:-1].T)
         input_delta = input_error * self.activation_function(input, True)
         return input_delta
 
