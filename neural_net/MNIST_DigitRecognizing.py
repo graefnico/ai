@@ -16,7 +16,7 @@ num_features = 784
 max_value = 255
 
 # number of images used from the dataset. max is 60000
-data_size = 20000
+data_size = 60000
 
 # turn the pixel values of each image into a feature vector -> input vector of the neural net
 X = np.array([list(i.reshape((-1, num_features))[0]) for i in images[:data_size]])
@@ -60,10 +60,10 @@ Y_test = Y[-testSize:]
 
 # create the neural network with 15 units in the hidden layer
 # and a learning rate of 0.015 (approx. 1/64 = 1/num_features)
-nn = NeuralNetwork([28], 0.00025)
+nn = NeuralNetwork([30,15], 0.00025)
 
 # train the neural network with the test data and 750 iterations
-nn.train(X_train, Y_train, t=2000, printError=True)
+nn.train(X_train, Y_train, t=10000, printError=True)
 #np.savetxt("weights0.txt",nn.weights[0])
 #np.savetxt("weights1.txt",nn.weights[1])
 #np.savetxt("weights2.txt",nn.weights[2])
@@ -86,8 +86,8 @@ for pred in predicted_binary:
 
 # show the first 24 test images and the prediction of the neural network
 images_and_predictions = list(zip(X_test, predicted))
-for index, (image, prediction) in enumerate(images_and_predictions[24:44]):
-    plt.subplot(5, 4, index + 1)
+for index, (image, prediction) in enumerate(images_and_predictions[:12]):
+    plt.subplot(3, 4, index + 1)
     plt.axis('off')
     plt.imshow(image.reshape((28,28)), cmap=plt.cm.gray_r, interpolation='nearest')
     plt.title('Prediction: %i' % prediction)
@@ -95,7 +95,7 @@ for index, (image, prediction) in enumerate(images_and_predictions[24:44]):
 plt.savefig('predictions.png')
 
 dream_template = np.ones((1,784)) / 2
-dream = nn.dream(dream_template, np.array([[1,0,0,0,0,0,0,0,0,0]]), t=100000, printPercentage=True)
+dream = nn.dream(dream_template, np.array([[1,0,0,0,0,0,0,0,0,0]]), t=500000, printPercentage=True)
 dream = (dream[0] * 255).round()
 
 plt.subplot(1, 1, 1)
