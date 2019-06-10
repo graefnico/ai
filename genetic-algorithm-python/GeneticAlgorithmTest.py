@@ -1,6 +1,6 @@
 """
-Copyright (c) 2017 Nico Gräf (nicograef.de, github.com/graefnico)
-Simple test for the genetic algorithm implementation on github.com/graefnico/ai
+Copyright (c) 2017 Nico Gräf (nicograef.de, github.com/nicograef)
+Simple test for the genetic algorithm implementation on github.com/nicograef/ai
 """
 
 from GeneticAlgorithm import GeneticAlgorithm
